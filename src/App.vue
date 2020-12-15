@@ -14,6 +14,10 @@
       <div class="health-bar-progress" :style="enemyBarStyle"></div>
     </div>
   </div>
+  <div class="game-status" v-if="winner">
+    <h2>Game Over</h2>
+    <h3>{{ winner }} won</h3>
+  </div>
   <div class="actions-box">
     <button @click="attackEnemy">ATTACK</button>
     <button :disabled="superAttackActivate" @click="superAttackEnemy">SUPER ATTACK</button>
@@ -33,14 +37,21 @@ export default {
     return {
       playerHealth: 100,
       enemyHealth: 100,
-      currentRound: 0
+      currentRound: 0,
+      winner: null
     }
   },
   computed: {
     enemyBarStyle() {
+      if (this.enemyHealth < 20)
+        return {width: this.enemyHealth + '%', backgroundColor: 'crimson'}
+
       return {width: this.enemyHealth + '%'}
     },
     playerBarStyle() {
+      if (this.playerHealth < 20)
+        return {width: this.playerHealth + '%', backgroundColor: 'crimson'}
+
       return {width: this.playerHealth + '%'}
     },
     superAttackActivate() {
@@ -49,18 +60,18 @@ export default {
   },
   watch: {
     playerHealth(value) {
-      if (value <= 0 && this.enemyHealth <= 0) {
-        console.log('ITS A DRAW (player)')
-      } else if (value <= 0) {
-        console.log('PLAYER LOST')
-      }
+      if (value <= 0 && this.enemyHealth <= 0)
+        this.winner = 'draw'
+      else if (value <= 0)
+        this.winner = 'enemy'
+
     },
     enemyHealth(value) {
-      if (value <= 0 && this.playerHealth <= 0) {
-        console.log('ITS A DRAW (enemy)')
-      } else if (value <= 0) {
-        console.log('ENEMY LOST')
-      }
+      if (value <= 0 && this.playerHealth <= 0)
+        this.winner = 'draw'
+      else if (value <= 0)
+        this.winner = 'player'
+
     }
   },
   methods: {
