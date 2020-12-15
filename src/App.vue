@@ -16,7 +16,7 @@
   </div>
   <div class="actions-box">
     <button @click="attackEnemy">ATTACK</button>
-    <button :disabled="currentRound % 3" @click="superAttackEnemy">SUPER ATTACK</button>
+    <button :disabled="superAttackActivate" @click="superAttackEnemy">SUPER ATTACK</button>
     <button @click="healPlayer">HEAL</button>
     <button @click="surrender">SURRENDER</button>
   </div>
@@ -42,6 +42,9 @@ export default {
     },
     playerBarStyle() {
       return {width: this.playerHealth + '%'}
+    },
+    superAttackActivate() {
+      return this.currentRound % 3 !== 0
     }
   },
   methods: {
