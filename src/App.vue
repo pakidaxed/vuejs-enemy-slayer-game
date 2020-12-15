@@ -16,7 +16,11 @@
   </div>
   <div class="game-status" v-if="winner">
     <h2>Game Over</h2>
-    <h3>{{ winner }} won</h3>
+    <h3>After {{ currentRound }} rounds</h3>
+    <h3 v-if="winner === 'player'">You Won !</h3>
+    <h3 v-else-if="winner === 'enemy'">You Lost !</h3>
+    <h3 v-else>It's a DRAW !</h3>
+    <button @click="resetGame">Replay ?</button>
   </div>
   <div class="actions-box">
     <button @click="attackEnemy">ATTACK</button>
@@ -60,18 +64,24 @@ export default {
   },
   watch: {
     playerHealth(value) {
-      if (value <= 0 && this.enemyHealth <= 0)
+      if (value <= 0 && this.enemyHealth <= 0) {
         this.winner = 'draw'
-      else if (value <= 0)
+        this.playerHealth = 0
+        this.enemyHealth = 0
+      } else if (value <= 0) {
         this.winner = 'enemy'
-
+        this.playerHealth = 0
+      }
     },
     enemyHealth(value) {
-      if (value <= 0 && this.playerHealth <= 0)
+      if (value <= 0 && this.playerHealth <= 0) {
         this.winner = 'draw'
-      else if (value <= 0)
+        this.enemyHealth = 0
+        this.playerHealth = 0
+      } else if (value <= 0) {
         this.winner = 'player'
-
+        this.enemyHealth = 0
+      }
     }
   },
   methods: {
@@ -96,6 +106,12 @@ export default {
         this.playerHealth += healValue
 
       this.attackPlayer() // still attacks you, when your healing in the turn
+    },
+    resetGame() {
+      this.winner = 0
+      this.playerHealth = 100
+      this.enemyHealth = 100
+      this.currentRound = 0
     },
     generateRandomValue(min, max) {
       return Math.floor(Math.random() * (max - min)) + min
@@ -159,5 +175,15 @@ button:hover {
 
 button:disabled {
   opacity: 0.3;
+}
+
+.game-status {
+  border: 1px solid #2c3e50;
+  margin: 30px auto 0 auto;
+  width: 50%;
+}
+
+.player-box, .enemy-box {
+
 }
 </style>
