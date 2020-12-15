@@ -2,16 +2,24 @@
   <header>
     <h1>VUE Enemy Slayer Game</h1>
   </header>
-  <div class="player-box">
-    <h1>Player Health: {{ playerHealth }}</h1>
-    <div class="health-bar">
-      <div class="health-bar-progress" :style="playerBarStyle"></div>
+  <div class="container">
+    <div class="action-window">
+      <div class="player-box">
+        <h1>Player Health: {{ playerHealth }}</h1>
+        <div class="health-bar">
+          <div class="health-bar-progress" :style="playerBarStyle"></div>
+        </div>
+      </div>
+      <div class="enemy-box">
+        <h1>Enemy Health: {{ enemyHealth }}</h1>
+        <div class="health-bar">
+          <div class="health-bar-progress" :style="enemyBarStyle"></div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="enemy-box">
-    <h1>Enemy Health: {{ enemyHealth }}</h1>
-    <div class="health-bar">
-      <div class="health-bar-progress" :style="enemyBarStyle"></div>
+    <div class="battle-log">
+      <h1>Battle log</h1>
+      <p v-for="message in logMessages" :key="message">{{ message.actionBy }} - {{ message.actionType }} - {{ message.actionValue }}</p>
     </div>
   </div>
   <div class="game-status" v-if="winner">
@@ -42,7 +50,8 @@ export default {
       playerHealth: 100,
       enemyHealth: 100,
       currentRound: 0,
-      winner: null
+      winner: null,
+      logMessages: []
     }
   },
   computed: {
@@ -87,15 +96,21 @@ export default {
   methods: {
     attackEnemy() {
       this.currentRound++
-      this.enemyHealth -= this.generateRandomValue(5, 12)
+      const damage = this.generateRandomValue(5, 12)
+      this.enemyHealth -= damage
+      this.addLogMessage('player', 'attack', damage)
       this.attackPlayer()
     },
     attackPlayer() {
-      this.playerHealth -= this.generateRandomValue(8, 15)
+      const damage = this.generateRandomValue(8, 15)
+      this.playerHealth -= damage
+      this.addLogMessage('enemy', 'attack', damage)
     },
     superAttackEnemy() {
       this.currentRound++
-      this.enemyHealth -= this.generateRandomValue(10, 25)
+      const damage = this.generateRandomValue(10, 25)
+      this.enemyHealth -= damage
+      this.addLogMessage('player', 'attack', damage)
       this.attackPlayer()
     },
     healPlayer() {
@@ -105,6 +120,7 @@ export default {
       else
         this.playerHealth += healValue
 
+      this.addLogMessage('player', 'heal', healValue)
       this.attackPlayer() // still attacks you, when your healing in the turn
     },
     surrender() {
@@ -115,9 +131,17 @@ export default {
       this.playerHealth = 100
       this.enemyHealth = 100
       this.currentRound = 0
+      this.logMessages = []
     },
     generateRandomValue(min, max) {
       return Math.floor(Math.random() * (max - min)) + min
+    },
+    addLogMessage(who, what, value) {
+      this.logMessages.unshift({
+        actionBy: who,
+        actionType: what,
+        actionValue: value
+      })
     }
   }
 }
@@ -139,6 +163,26 @@ header {
   color: white;
   margin: 0;
   padding: 0;
+}
+
+.container {
+  display: flex;
+}
+
+.battle-log {
+  flex: 1;
+  overflow: hidden;
+  height: 250px;
+}
+
+.action-window {
+  flex: 2
+}
+
+.action-window h1 {
+  padding: 0;
+  text-align: left;
+  margin-top: 25px;
 }
 
 h1 {
@@ -186,7 +230,4 @@ button:disabled {
   width: 50%;
 }
 
-.player-box, .enemy-box {
-
-}
 </style>
