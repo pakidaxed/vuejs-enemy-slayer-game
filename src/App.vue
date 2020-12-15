@@ -22,7 +22,7 @@
     <h3 v-else>It's a DRAW !</h3>
     <button @click="resetGame">Start New Game</button>
   </div>
-  <div class="actions-box">
+  <div class="actions-box" v-else>
     <button @click="attackEnemy">ATTACK</button>
     <button :disabled="superAttackActivate" @click="superAttackEnemy">SUPER ATTACK</button>
     <button @click="healPlayer">HEAL</button>
