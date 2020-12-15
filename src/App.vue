@@ -199,6 +199,7 @@ h1 {
   background-color: #42b983;
   width: 100%;
   height: 50px;
+  transition: width 1s;
 }
 
 .actions-box {
