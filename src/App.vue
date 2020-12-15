@@ -50,22 +50,27 @@ export default {
   methods: {
     attackEnemy() {
       this.currentRound++
-      this.enemyHealth -= this.generateRandomDamage(5, 12)
+      this.enemyHealth -= this.generateRandomValue(5, 12)
       this.attackPlayer()
     },
     attackPlayer() {
-      this.playerHealth -= this.generateRandomDamage(8, 15)
+      this.playerHealth -= this.generateRandomValue(8, 15)
     },
     superAttackEnemy() {
       this.currentRound++
-      this.enemyHealth -= this.generateRandomDamage(10, 25)
+      this.enemyHealth -= this.generateRandomValue(10, 25)
       this.attackPlayer()
     },
     healPlayer() {
-      if (this.playerHealth < 100)
-      this.playerHealth += 10;
+      const healValue = this.generateRandomValue(10, 20)
+      if (this.playerHealth + healValue > 100)
+        this.playerHealth = 100
+      else
+        this.playerHealth += healValue
+
+      this.attackPlayer() // still attacks you, when your healing in the turn
     },
-    generateRandomDamage(min, max) {
+    generateRandomValue(min, max) {
       return Math.floor(Math.random() * (max - min)) + min
     }
   }
@@ -120,6 +125,11 @@ button {
   margin: 10px auto;
   color: white;
 }
+
+button:hover {
+  background-color: #2c3e50;
+}
+
 button:disabled {
   opacity: 0.3;
 }
