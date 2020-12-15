@@ -20,7 +20,7 @@
     <h3 v-if="winner === 'player'">You Won !</h3>
     <h3 v-else-if="winner === 'enemy'">You Lost !</h3>
     <h3 v-else>It's a DRAW !</h3>
-    <button @click="resetGame">Replay ?</button>
+    <button @click="resetGame">Start New Game</button>
   </div>
   <div class="actions-box">
     <button @click="attackEnemy">ATTACK</button>
@@ -106,6 +106,9 @@ export default {
         this.playerHealth += healValue
 
       this.attackPlayer() // still attacks you, when your healing in the turn
+    },
+    surrender() {
+      this.winner = 'enemy'
     },
     resetGame() {
       this.winner = 0
