@@ -33,7 +33,7 @@
   <div class="actions-box" v-else>
     <button @click="attackEnemy">ATTACK</button>
     <button :disabled="superAttackActivate" @click="superAttackEnemy">SUPER ATTACK</button>
-    <button @click="healPlayer">HEAL</button>
+    <button :disabled="playerHealth === 100" @click="healPlayer">HEAL</button>
     <button @click="surrender">SURRENDER</button>
   </div>
 
