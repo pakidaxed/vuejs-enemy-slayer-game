@@ -47,6 +47,22 @@ export default {
       return this.currentRound % 3 !== 0
     }
   },
+  watch: {
+    playerHealth(value) {
+      if (value <= 0 && this.enemyHealth <= 0) {
+        console.log('ITS A DRAW (player)')
+      } else if (value <= 0) {
+        console.log('PLAYER LOST')
+      }
+    },
+    enemyHealth(value) {
+      if (value <= 0 && this.playerHealth <= 0) {
+        console.log('ITS A DRAW (enemy)')
+      } else if (value <= 0) {
+        console.log('ENEMY LOST')
+      }
+    }
+  },
   methods: {
     attackEnemy() {
       this.currentRound++
