@@ -16,7 +16,7 @@
   </div>
   <div class="actions-box">
     <button @click="attackEnemy">ATTACK</button>
-    <button @click="superAttackEnemy">SUPER ATTACK</button>
+    <button :disabled="currentRound % 3" @click="superAttackEnemy">SUPER ATTACK</button>
     <button @click="healPlayer">HEAL</button>
     <button @click="surrender">SURRENDER</button>
   </div>
@@ -32,7 +32,8 @@ export default {
   data() {
     return {
       playerHealth: 100,
-      enemyHealth: 100
+      enemyHealth: 100,
+      currentRound: 0
     }
   },
   computed: {
@@ -45,6 +46,7 @@ export default {
   },
   methods: {
     attackEnemy() {
+      this.currentRound++
       this.enemyHealth -= this.generateRandomDamage(5, 12)
       this.attackPlayer()
     },
@@ -52,6 +54,7 @@ export default {
       this.playerHealth -= this.generateRandomDamage(8, 15)
     },
     superAttackEnemy() {
+      this.currentRound++
       this.enemyHealth -= this.generateRandomDamage(10, 25)
       this.attackPlayer()
     },
@@ -113,5 +116,8 @@ button {
   padding: 10px 15px;
   margin: 10px auto;
   color: white;
+}
+button:disabled {
+  opacity: 0.3;
 }
 </style>
